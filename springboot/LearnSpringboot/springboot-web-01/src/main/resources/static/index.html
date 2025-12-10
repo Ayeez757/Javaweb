@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>用户信息表</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <h2>用户信息表</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>用户名</th>
+                    <th>密码</th>
+                    <th>姓名</th>
+                    <th>注册时间</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="user in users" :key="user.id">
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.userName }}</td>
+                    <td>{{ user.password }}</td>
+                    <td>{{ user.name }}</td>
+                    <td>{{ user.registerTime }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                users: []
+            },
+            mounted() {
+                // 在组件挂载后发起请求获取数据
+                this.fetchUsers();
+            },
+            methods: {
+                fetchUsers() {
+                    // 使用axios发起GET请求获取用户数据
+                    axios.get('/list') // 这里替换为实际的API地址
+                        .then(response => {
+                            // 将返回的数据赋值给users
+                            this.users = response.data;
+                        })
+                        .catch(error => {
+                            console.error('获取用户数据失败:', error);
+                        });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
