@@ -37,7 +37,7 @@ class SpringbootMybatisQuickstartApplicationTests {
     public void testInsert(){
         User user = new User(null, "ayeez", "123456", "ayeez", 18);
         userMapper.insertUser( user);
-    }
+    } 
 
     @Test
     public void testUpdate(){
