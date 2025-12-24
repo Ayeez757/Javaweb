@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.ayeez.mapper.EmpExprMapper">
+    <insert id="insertBatch">
+        insert into emp_expr(emp_id, begin, end, company, job)
+        VALUES
+        <foreach collection="empExprList" item="empExpr" separator=",">
+            #{empExpr.empId}, #{empExpr.begin}, #{empExpr.end}, #{empExpr.company}, #{empExpr.job}
+        </foreach>
+        -- (39, '2011-01-01', '2013-01-01', '字节', 'Java开发'),
+        -- (39, '2013-01-01', '2015-01-01', '京东', '全栈开发');
+    </insert>
+
+
+</mapper>

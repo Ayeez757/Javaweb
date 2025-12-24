@@ -40,4 +40,10 @@ public class DeptServiceImpl implements DeptService {
         deptMapper.insert(dept);
 
     }
+
+    @Override
+    public void update(Dept dept) {
+        dept.setUpdateTime(LocalDateTime.now());
+        deptMapper.update(dept);
+    }
 }

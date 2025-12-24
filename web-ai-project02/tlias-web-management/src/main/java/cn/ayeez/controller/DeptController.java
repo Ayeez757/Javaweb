@@ -9,34 +9,41 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@RequestMapping("/depts")
 @RestController
 public class DeptController {
 
     @Autowired
     private DeptService deptService;
 
-    @GetMapping("/depts")
+    @GetMapping
     public Result findAll() {
         List<Dept> list = deptService.findAll();
         return Result.success(list);
     }
 
-    @DeleteMapping("/depts")
+    @DeleteMapping
     public Result deleteById(Integer id) {
         deptService.deleteById(id);
         return Result.success();
     }
 
-    @PostMapping("depts")
+    @PostMapping
     public Result add(@RequestBody Dept dept) {
         deptService.add(dept);
         return Result.success();
     }
 
 
-    @GetMapping("depts/{id}")
+    @GetMapping("/{id}")
     public Result getInfo(@PathVariable Integer id) {
         Dept depts = deptService.getById(id);
         return Result.success(depts);
+    }
+
+    @PutMapping
+    public Result update(@RequestBody Dept dept) {
+        deptService.update(dept);
+        return Result.success();
     }
 }
