@@ -21,7 +21,7 @@ class SpringbootMybatisQuickstartApplicationTests {
     @Test
     public void testFindAll(){
         List<User> userList = userMapper.findAll();
-        userList.forEach(System.out::println);
+//        userList.forEach(System.out::println);
     }
 
     /**

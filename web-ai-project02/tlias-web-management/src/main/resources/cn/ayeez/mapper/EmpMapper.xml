@@ -3,8 +3,33 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.ayeez.mapper.EmpMapper">
+    <update id="update">
 
-<!--    <select id="pages" resultType="cn.ayeez.pojo.Emp">-->
+        update emp
+        <set>
+            <if test="username!=null and username != ''">username=#{username},</if>
+            <if test="password!=null and password != ''">password= #{password},</if>
+            <if test="name!=null and name != ''">name= #{name},</if>
+            <if test="gender!=null">gender= #{gender},</if>
+            <if test="phone!=null and phone != ''">phone= #{phone},</if>
+            <if test="job!=null">job= #{job},</if>
+            <if test="salary!=null">salary= #{salary},</if>
+            <if test="image!=null and image != ''">image= #{image},</if>
+            <if test="entryDate!=null">entry_date= #{entryDate},</if>
+            <if test="deptId!=null">dept_id= #{deptId},</if>
+            <if test="updateTime!=null">update_time= #{updateTime},</if>
+        </set>
+        where id=#{id}
+
+    </update>
+    <delete id="deleteByIds">
+        delete from emp where id in
+        <foreach collection="ids" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--    <select id="pages" resultType="cn.ayeez.pojo.Emp">-->
 <!--        select e.*, d.name deptName-->
 <!--        from emp e-->
 <!--                 left join dept d on e.dept_id = d.id-->
@@ -34,4 +59,71 @@
 
         order by e.update_time desc
     </select>
+    
+    <resultMap id="empResultMap" type="cn.ayeez.pojo.Emp">
+        <id property="id" column="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="phone" property="phone"/>
+        <result column="job" property="job"/>
+        <result column="salary" property="salary"/>
+        <result column="image" property="image"/>
+        <result column="entry_date" property="entryDate"/>
+        <result column="dept_id" property="deptId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result property="deptName" column="deptName"/>
+
+        <collection property="empExprs" ofType="cn.ayeez.pojo.EmpExpr">
+            <result column="ee_id" property="id"/>
+            <result column="emp.id" property="empId"/>
+            <result column="ee_begin" property="begin"/>
+            <result column="ee_end" property="end"/>
+            <result column="ee_company" property="company"/>
+            <result column="ee_job" property="job"/>
+        </collection>
+
+    </resultMap>
+    
+    <select id="getById" resultMap="empResultMap">
+        select emp.*,
+               emp_expr.id ee_id,
+               emp_expr.begin ee_begin,
+               emp_expr.end ee_end,
+               emp_expr.company ee_company,
+               emp_expr.job ee_job
+        from emp left join emp_expr
+            on emp.id=emp_expr.emp_id
+        where emp.id=#{id}
+
+    </select>
+    <select id="getEmpJobData" resultType="java.util.Map">
+        select
+            (case job
+                 when '1' then '班主任'
+                 when '2' then '讲师'
+                 when '3' then '学工主管'
+                 when '4' then '教研主管'
+                 when '5' then '咨询师'
+                 else '其他' end) jobname
+             ,count(*) num
+        from emp
+        group by job
+        order by count(*)
+    </select>
+    <select id="getEmpGenderData" resultType="java.util.Map">
+            select
+                if (gender=1,'男性员工','女性员工') name,
+                count(*) value
+            from emp group by gender
+    </select>
+    <select id="loginByUsernameAndPassword" resultType="cn.ayeez.pojo.Emp">
+        select *
+        from emp
+        where username = #{username}
+          and password = #{password}
+    </select>
+
 </mapper>

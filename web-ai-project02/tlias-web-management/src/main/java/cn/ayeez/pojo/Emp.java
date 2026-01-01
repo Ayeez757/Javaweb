@@ -1,5 +1,6 @@
 package cn.ayeez.pojo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -23,6 +24,10 @@ public class Emp {
     private LocalDateTime updateTime; //修改时间
     private String deptName; //部门名称
 
+//
     //关联工作经历
+    @JsonProperty("exprList")
     private List<EmpExpr> empExprs;
+
+
 }
